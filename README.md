@@ -1,4 +1,4 @@
-# HeimEngine — Releases
+# HeimEngine // Releases
 
 Compiled release binaries for **HeimEngine** (rScrapper), a Windows desktop app that collects and
 analyses posts from Reddit, YouTube and X/Twitter.

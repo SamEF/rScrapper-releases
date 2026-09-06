@@ -11,7 +11,7 @@ here.
 
 Download **`HeimEngine-win-Setup.exe`** from the [latest release](../../releases/latest) and run it.
 
-- Installs per-user, under `%LOCALAPPDATA%\HeimEngine` — no administrator rights required.
+- Installs per-user, under `%LOCALAPPDATA%\HeimEngine` with no administrator rights required.
 - Self-contained: the .NET runtime is included, so nothing else needs installing for the app itself.
 - Roughly 150 MB download, about 350 MB installed.
 

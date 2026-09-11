@@ -20,19 +20,34 @@ code-signed. Choose **More info → Run anyway** if you trust the source.
 
 A portable `.zip` is also published if you would rather not install.
 
-## Before it will actually do anything
+## First launch
 
-Two prerequisites are **not** bundled and must be present, or the app will start but do nothing
-useful. It tells you if either is missing.
+HeimEngine sets itself up the first time you run it. There is nothing to configure and no
+connection string to type.
 
-**1. A SQL Server instance.** The default configuration expects
-[SQL Server LocalDB](https://learn.microsoft.com/sql/database-engine/configure-windows/sql-server-express-localdb),
-which ships with SQL Server Express or the Visual Studio "Data storage and processing" workload.
-Install it and you are done — the app creates its own database and applies its schema on first
-launch, with nothing to configure.
+It needs two things that are not bundled, and installs them itself if they are missing:
 
-To use a different server instead, create
-`%LOCALAPPDATA%\HeimEngine\appsettings.user.json`:
+- **SQL Server LocalDB**, for the database. About 60 MB, downloaded from Microsoft. This is the one
+  step that asks for **administrator approval** — the installer is machine-wide, so Windows shows a
+  UAC prompt. It appears once, on a machine that does not already have LocalDB.
+- **The [Brave browser](https://brave.com/download/)**, which the collector drives to load pages.
+  Installed per-user, so there is no prompt for this one.
+
+Both are verified as genuinely signed by their publisher before anything is run.
+
+The splash screen reports what it is doing and offers **Skip**. If you skip, or decline the
+administrator prompt, or have no connection, the app still starts and tells you what is missing —
+**Settings → Database Connection → Set up local database** finishes the job later, reusing anything
+already downloaded.
+
+Once it is up, add a data source and collection begins on its own. On an existing installation
+that has been updated, collection still waits for **Start** in the title bar; turn on
+*Start collecting automatically on launch* in Settings if you would rather it did not.
+
+### Using a different database
+
+To point HeimEngine at SQL Server or Azure SQL instead of the local database, create
+`%APPDATA%\HeimEngine\appsettings.user.json`:
 
 ```json
 {
@@ -42,11 +57,9 @@ To use a different server instead, create
 }
 ```
 
-That file sits outside the installation folder, so it survives updates.
-
-**2. The [Brave browser](https://brave.com/download/).** HeimEngine drives a real browser to load
-pages; Brave is the only one supported, and there is no fallback. Without it the interface works and
-your existing data is readable, but every collection run fails.
+That file sits outside the installation folder, so it survives updates. You can also paste a
+connection string into **Settings → Database Connection**; the local database stays pinned at the
+top of the saved connections list, so you can always get back to it.
 
 You will also need outbound HTTPS access, and your firewall must allow the browser subprocess.
 
@@ -58,9 +71,13 @@ asked to restart.
 
 ## Your data
 
-Everything you configure or install lives in `%LOCALAPPDATA%\HeimEngine` — the database connection
-string (encrypted with Windows DPAPI, readable only by your account), logs, plugins and any settings
-overrides. Updates replace the application, never that folder.
+Everything you configure or collect lives in **`%APPDATA%\HeimEngine`**: the database and its files,
+your connection string (encrypted with Windows DPAPI, readable only by your Windows account), logs,
+plugins and settings overrides.
+
+That is deliberately *not* the `%LOCALAPPDATA%\HeimEngine` folder the application is installed into.
+That one is replaced wholesale on every update and removed when you uninstall; your data is kept
+somewhere it cannot be caught by either.
 
 ## Verifying a download
 
